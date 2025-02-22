@@ -2,47 +2,35 @@ import { useState, useEffect, useRef } from "react";
 
 import Spinner from "../spinner/Spinner";
 import Error from "../error/Error";
-import MarvelService from "../../services/MarvelService";
+import useMarvelService from "../../services/MarvelService";
 import "./charList.scss";
 
 export default function CharList({ onCharSelected }) {
   const [charList, setCharList] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [onRequestLoading, setOnRequestLoading] = useState(false);
-  const [error, setError] = useState(false);
   const [offset, setOffset] = useState(0);
   const [charEnded, setCharEnded] = useState(false);
 
-  const marvelService = new MarvelService();
+  const { loading, error, getAllCharacters } = useMarvelService();
 
   useEffect(() => {
-    onRequest();
+    onRequest(offset, true);
   }, []);
 
-  const onRequest = (offset) => {
-    onCharListLoading();
-    marvelService.getAllCharacters(offset)
-      .then(onCharListLoaded)
-      .catch(onError);
+  const onRequest = (offset, initial) => {
+    initial ? setOnRequestLoading(false) : setOnRequestLoading(true);
+    getAllCharacters(offset).then(onCharListLoaded)
   };
 
-  const onCharListLoading = () => setOnRequestLoading(true);
-  
   const onCharListLoaded = (newCharList) => {
     let ended = false;
 
     if (newCharList.length < 9) ended = true;
 
     setCharList(charList => [...charList, ...newCharList]);
-    setLoading(false);
     setOnRequestLoading(false);
     setOffset(offset => offset + 9);
     setCharEnded(ended);
-  };
-
-  const onError = () => {
-    setError(true);
-    setLoading(false);
   };
 
   const refItems = useRef([]);
@@ -65,7 +53,7 @@ export default function CharList({ onCharSelected }) {
           className="char__item"
           tabIndex={0}
           ref={el => refItems.current[i] = el}
-          key={id}
+          key={i}
           onClick={() => {
             onCharSelected(id);
             focucOnItem(i);
@@ -87,12 +75,11 @@ export default function CharList({ onCharSelected }) {
   const items = renderItems(charList);
 
   const isError = error ? <Error /> : null;
-  const isLoading = loading ? <Spinner /> : null;
-  const isContent = !(loading || error) ? items : null;
+  const isLoading = loading && !onRequestLoading ? <Spinner /> : null;
 
   return (
     <div className="char__list">
-      {isError} {isLoading} {isContent}
+      {isError} {isLoading} {items}
 
       <button
         onClick={() => onRequest(offset)}
