@@ -1,7 +1,7 @@
 import {
-  BrowserRouter as Router,
-  Switch,
+  BrowserRouter,
   Route,
+  Routes,
 } from "react-router-dom";
 
 import AppHeader from "../appHeader/AppHeader";
@@ -14,19 +14,15 @@ import SingleComic from "../singleComic/SingleComic";
 export default function App() {
   return (
     <div className="app">
-      <Router>
+      <BrowserRouter>
         <AppHeader />
         <main>
-          <Switch>
-            <Route exact path="/">
-              <MainPage/>
-            </Route>
-            <Route exact path="/comics/">
-              <ComicsPage/>
-            </Route>
-          </Switch>
+          <Routes>
+            <Route path="/" element={<MainPage /> }/>
+            <Route path="/comics/" element={<ComicsPage/>}/>
+          </Routes>
         </main>
-      </Router>
+      </BrowserRouter>
     </div>
   );
 }

@@ -14,9 +14,9 @@ export default function AppHeader () {
         <ul>
           <li>
             <NavLink
-              exact
+              end
               to="/"
-              activeStyle={{ "color": "#9F0013"}}
+              style={({ isActive, isPending }) => ({ color: isActive ? "#9F0013" : "#aaa" })}
             >
               Characters
             </NavLink>
@@ -24,9 +24,9 @@ export default function AppHeader () {
           /
           <li>
             <NavLink
-              exact
+              end
               to="/comics/"
-              activeStyle={{ "color": "#9F0013"  }}
+              style={({ isActive, isPending }) => ({ color: isActive ? "#9F0013" : "#aaa" })}
             >
               Comics
             </NavLink>
