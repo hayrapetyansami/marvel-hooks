@@ -16,7 +16,7 @@ export default function CharList({ onCharSelected }) {
   useEffect(() => {
     onRequest(offset, true);
   }, []);
-
+ 
   const onRequest = (offset, initial) => {
     initial ? setOnRequestLoading(false) : setOnRequestLoading(true);
     getAllCharacters(offset).then(onCharListLoaded)
