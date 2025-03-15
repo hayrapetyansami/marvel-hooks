@@ -5,6 +5,8 @@ import Error from "../error/Error";
 import useMarvelService from "../../services/MarvelService";
 import "./charList.scss";
 
+// import logger from "./test";
+
 export default function CharList({ onCharSelected }) {
   const [charList, setCharList] = useState([]);
   const [onRequestLoading, setOnRequestLoading] = useState(false);
